@@ -1,40 +1,42 @@
-<form [formGroup]="surveyForm">
+<div class="col s12">
+    <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
 
-    <div>
-        <mat-form-field>
-            <mat-label>Titre du sondage</mat-label>
-            <input matInput>
-        </mat-form-field>
-    </div>
+        <div class="form-group">
+            <mat-form-field>
+                <mat-label for="title">Titre du sondage</mat-label>
+                <input matInput type="text" class="form-control" formControlName="title">
+            </mat-form-field>
+        </div>
 
-    <div>
-        <p>
-            Choix : {{choices.selectedOptions.selected.length}}
-        </p>
-        <mat-selection-list #choices>
-            <mat-list-option *ngFor="let choice of choicesList">
-                {{choice}}
-            </mat-list-option>
-        </mat-selection-list>
-    </div>
-    <div class="button-container">
-        <button mat-mini-fab color="primary" aria-label="Add a choice">
-            <mat-icon>+</mat-icon>
-        </button>
-        <button mat-mini-fab color="warn" aria-label="Delete a choice">
-            <mat-icon>-</mat-icon>
-        </button>
-    </div>
+        <div formArrayName="choices">
+            <h3>Choix des sujets:</h3>
+            <div class="form-group" *ngFor="let choiceControl of getChoices().controls; let i = index">
+                <mat-form-field>
+                    <mat-label for="title">Ajouter un sujet</mat-label>
+                    <input matInput type="text" class="form-control" [formControlName]="i">
+                </mat-form-field>
+            </div>
 
-    <div>
-        <mat-form-field>
-            <mat-label>Votre nom</mat-label>
-            <input matInput>
-        </mat-form-field>
-    </div>
+            <div class="button-container">
+                <button mat-mini-fab color="primary" aria-label="Add a choice" (click)="onAddChoice()">
+                    <mat-icon>add</mat-icon>
+                </button>
 
-    <div class="button-row">
-        <button mat-flat-button color="primary">Créer un sondage</button>
-    </div>
+                <button mat-mini-fab color="warn" aria-label="Delete a choice">
+                    <mat-icon>remove</mat-icon>
+                </button>
+            </div>
+        </div>
 
-</form>
+        <div class="form-group">
+            <mat-form-field>
+                <mat-label for="name">Votre nom</mat-label>
+                <input matInput type="text" class="form-control" formControlName="name">
+            </mat-form-field>
+        </div>
+
+        <div class="button-row">
+            <button mat-flat-button color="primary" type="submit">Créer un sondage</button>
+        </div>
+    </form>
+</div>
