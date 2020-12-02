@@ -1,0 +1,40 @@
+<form [formGroup]="surveyForm">
+
+    <div>
+        <mat-form-field>
+            <mat-label>Titre du sondage</mat-label>
+            <input matInput>
+        </mat-form-field>
+    </div>
+
+    <div>
+        <p>
+            Choix : {{choices.selectedOptions.selected.length}}
+        </p>
+        <mat-selection-list #choices>
+            <mat-list-option *ngFor="let choice of choicesList">
+                {{choice}}
+            </mat-list-option>
+        </mat-selection-list>
+    </div>
+    <div class="button-container">
+        <button mat-mini-fab color="primary" aria-label="Add a choice">
+            <mat-icon>+</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" aria-label="Delete a choice">
+            <mat-icon>-</mat-icon>
+        </button>
+    </div>
+
+    <div>
+        <mat-form-field>
+            <mat-label>Votre nom</mat-label>
+            <input matInput>
+        </mat-form-field>
+    </div>
+
+    <div class="button-row">
+        <button mat-flat-button color="primary">Créer un sondage</button>
+    </div>
+
+</form>
