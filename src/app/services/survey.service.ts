@@ -7,17 +7,27 @@ import { Subject } from 'rxjs';
 })
 export class SurveyService {
 
-  private surveys: Survey[] = [
-    new Survey('Test', ['Samedi', 'Dimanche'], 'Alexis')
-  ];
+  private surveys: Survey[] = [];
   surveySubject = new Subject<Survey[]>();
 
   emitSurveys() {
     this.surveySubject.next(this.surveys);
   }
 
-  addSurvey(survey: Survey) {
-    this.surveys.push(survey);
+  addChoice(newChoice: Survey) {
+    this.surveys.push(newChoice);
+    this.emitSurveys();
+  }
+
+  removeChoice(choice: Survey) {
+    const choiceIndexToRemove = this.surveys.findIndex(
+      (choice1) => {
+        if (choice1 === choice) {
+          return true;
+        }
+      }
+    );
+    this.surveys.splice(choiceIndexToRemove, 1);
     this.emitSurveys();
   }
 

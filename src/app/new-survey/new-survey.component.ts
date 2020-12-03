@@ -45,7 +45,7 @@ export class NewSurveyComponent implements OnInit {
       value['choices'],
       value['name']
     );
-    this.surveyService.addSurvey(newSurvey);
+    this.surveyService.addChoice(newSurvey);
   }
 
 }
