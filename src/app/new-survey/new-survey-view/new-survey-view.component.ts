@@ -1,24 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Survey } from 'src/app/models/survey.model';
 import { SurveyService } from 'src/app/services/survey.service';
-import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-survey-view',
   templateUrl: './new-survey-view.component.html',
   styleUrls: ['./new-survey-view.component.scss']
 })
-export class NewSurveyViewComponent implements OnInit {
+export class NewSurveyViewComponent implements OnInit, OnDestroy {
 
-  survey: Survey;
+  surveyTitle: string = 'Test';
+  surveyChoice: string = 'Test';
+  surveyName: string = 'Test';
 
-  constructor(private surveyService: SurveyService,
-              private router: Router) { }
+  surveys: Survey[];
+  surveysSubscription: Subscription;
+
+  constructor(private surveyService: SurveyService) { }
 
   ngOnInit() {
-    /* this.survey = new Survey('', [], '');
-    const id = this. */
+    this.surveysSubscription = this.surveyService.surveySubject.subscribe(
+      (surveys: Survey[]) => {
+        this.surveys = surveys;
+      }
+    );
+   this.surveyService.emitSurveys();
+  }
 
+  ngOnDestroy() {
+    this.surveysSubscription.unsubscribe;
   }
 
 }
