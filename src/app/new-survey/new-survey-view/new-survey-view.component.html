@@ -1,12 +1,11 @@
 <div class="row">
     <div class="col-xs-12">
-        <h2>Liste des sondages:</h2>
+        <h2>Votez pour le sondage:</h2>
         <div>
-            <mat-list role="list">
-                <mat-list-item role="listitem">{{ survey.title }}</mat-list-item>
-                <mat-list-item role="listitem">{{ survey.name }}</mat-list-item>
-                <mat-list-item role="listitem">{{ survey.choices }}</mat-list-item>
-            </mat-list>
+            <app-new-survey 
+            [surveyTitle]="survey.title"
+            [surveyChoices]="survey.choices"
+            [surveyName]="survey.name"></app-new-survey>
         </div>
 
         <div class="button-row">

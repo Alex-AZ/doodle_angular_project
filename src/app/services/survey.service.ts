@@ -31,6 +31,14 @@ export class SurveyService {
     this.emitSurveys();
   }
 
+  findSurveyById(id: number): Survey | undefined {
+    const survey = this.surveys.find(
+      (surveyId) => {
+        return surveyId.id === id;
+      }
+    );
+    return survey;
+  }
 
   constructor() { }
 }

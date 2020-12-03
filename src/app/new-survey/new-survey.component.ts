@@ -12,6 +12,10 @@ import { Router } from '@angular/router';
 })
 export class NewSurveyComponent implements OnInit, OnDestroy {
 
+  @Input() surveyTitle: string;
+  @Input() surveyChoices: string[];
+  @Input() surveyName: string;
+
   surveys: Survey[];
   surveySubscription: Subscription;
 
@@ -56,6 +60,7 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
   onSubmit() {
     const value = this.surveyForm.value;
     const newSurvey = new Survey(
+      value['id'],
       value['title'],
       value['choices'],
       value['name']

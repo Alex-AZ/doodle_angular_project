@@ -1,35 +1,32 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Survey } from 'src/app/models/survey.model';
 import { SurveyService } from 'src/app/services/survey.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-survey-view',
   templateUrl: './new-survey-view.component.html',
   styleUrls: ['./new-survey-view.component.scss']
 })
-export class NewSurveyViewComponent implements OnInit, OnDestroy {
+export class NewSurveyViewComponent implements OnInit {
 
-  surveyTitle: string = 'Test';
-  surveyChoice: string = 'Test';
-  surveyName: string = 'Test';
+  survey: Survey;
 
-  surveys: Survey[];
-  surveysSubscription: Subscription;
-
-  constructor(private surveyService: SurveyService) { }
+  constructor(private surveyService: SurveyService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.surveysSubscription = this.surveyService.surveySubject.subscribe(
-      (surveys: Survey[]) => {
-        this.surveys = surveys;
-      }
-    );
-   this.surveyService.emitSurveys();
+    const id = this.route.snapshot.params['id'];
+    console.log(id);
+    
+    this.survey = this.surveyService.findSurveyById(+id);
+
+    this.surveyService.emitSurveys();
   }
 
-  ngOnDestroy() {
-    this.surveysSubscription.unsubscribe;
-  }
+  /* onViewSurvey(id: number) {
+    this.router.navigate(['survey/new', 'survey/view', id])
+  } */
 
 }

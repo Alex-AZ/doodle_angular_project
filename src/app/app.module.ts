@@ -19,7 +19,7 @@ import { NewSurveyViewComponent } from './new-survey/new-survey-view/new-survey-
 
 const appRoutes: Routes = [
   { path: 'survey/new', component: NewSurveyComponent },
-  { path: 'survey/view', component: NewSurveyViewComponent},
+  { path: 'survey/view/:id', component: NewSurveyViewComponent},
   { path: '', redirectTo: 'survey/new', pathMatch:'full' },
   { path: '**', redirectTo: 'survey/new' }
 ]
