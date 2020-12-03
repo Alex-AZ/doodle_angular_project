@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Survey } from 'src/app/models/survey.model';
+import { SurveyService } from 'src/app/services/survey.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-survey-view',
@@ -7,9 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewSurveyViewComponent implements OnInit {
 
-  constructor() { }
+  survey: Survey;
 
-  ngOnInit(): void {
+  constructor(private surveyService: SurveyService,
+              private router: Router) { }
+
+  ngOnInit() {
+    /* this.survey = new Survey('', [], '');
+    const id = this. */
+
   }
 
 }

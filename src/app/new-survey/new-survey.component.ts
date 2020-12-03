@@ -1,24 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { SurveyService } from '../services/survey.service';
 import { Survey } from '../models/survey.model';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-survey',
   templateUrl: './new-survey.component.html',
   styleUrls: ['./new-survey.component.scss']
 })
-export class NewSurveyComponent implements OnInit {
+export class NewSurveyComponent implements OnInit, OnDestroy {
 
-  choicesList: string[] = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
+  surveys: Survey[];
+  surveySubscription: Subscription;
 
   surveyForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private surveyService: SurveyService) { }
+              private surveyService: SurveyService,
+              private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.initForm();
+
+    this.surveySubscription = this.surveyService.surveySubject.subscribe(
+      (surveys: Survey[]) => {
+        this.surveys = surveys;
+      }
+    );
+    this.surveyService.emitSurveys();
   }
 
   initForm() {
@@ -38,6 +49,10 @@ export class NewSurveyComponent implements OnInit {
     this.getChoices().push(newChoiceControl);
   }
 
+  removeAt(i: number) {
+    this.getChoices().removeAt(i);
+  }
+
   onSubmit() {
     const value = this.surveyForm.value;
     const newSurvey = new Survey(
@@ -46,6 +61,11 @@ export class NewSurveyComponent implements OnInit {
       value['name']
     );
     this.surveyService.addChoice(newSurvey);
+    this.router.navigate(['survey/view']);
+  }
+
+  ngOnDestroy() {
+    this.surveySubscription.unsubscribe();
   }
 
 }

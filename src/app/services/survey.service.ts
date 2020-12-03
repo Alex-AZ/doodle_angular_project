@@ -19,10 +19,10 @@ export class SurveyService {
     this.emitSurveys();
   }
 
-  removeChoice(choice: Survey) {
+  removeChoice(i: Survey) {
     const choiceIndexToRemove = this.surveys.findIndex(
-      (choice1) => {
-        if (choice1 === choice) {
+      (i1) => {
+        if (i1 === i) {
           return true;
         }
       }
