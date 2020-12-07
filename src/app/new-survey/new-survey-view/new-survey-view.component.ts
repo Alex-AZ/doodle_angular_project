@@ -11,18 +11,40 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class NewSurveyViewComponent implements OnInit {
 
+  @Input() surveyChoice: string;
+  @Input() index: number;
   survey: Survey;
+  yes: boolean;
+  no: boolean;
 
-  constructor(private surveyService: SurveyService,
-    private route: ActivatedRoute) { }
+  constructor(
+    private surveyService: SurveyService,
+    private route: ActivatedRoute
+    ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
-    console.log(id);
-    
     this.survey = this.surveyService.findSurveyById(+id);
 
-    this.surveyService.emitSurveys();
+    //this.surveyService.emitSurveys();
+  }
+
+  onToggleYes() {
+    if (this.yes === undefined || this.yes === false) {
+      this.yes = true;
+      this.no = false;
+    } else {
+      this.yes = false;
+    }
+  }
+
+  onToggleNo() {
+    if (this.no === undefined || this.no === false) {
+      this.no = true;
+      this.yes = false;
+    } else {
+      this.no = false;
+    }
   }
 
   /* onViewSurvey(id: number) {

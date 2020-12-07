@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { NewSurveyComponent } from './new-survey/new-survey.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 import { NewSurveyViewComponent } from './new-survey/new-survey-view/new-survey-view.component';
 
 const appRoutes: Routes = [
@@ -42,7 +43,8 @@ const appRoutes: Routes = [
     MatButtonModule,
     MatListModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatMenuModule
   ],
   providers: [
     SurveyService

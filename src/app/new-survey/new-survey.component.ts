@@ -12,9 +12,7 @@ import { Router } from '@angular/router';
 })
 export class NewSurveyComponent implements OnInit, OnDestroy {
 
-  @Input() surveyTitle: string;
-  @Input() surveyChoices: string[];
-  @Input() surveyName: string;
+  @Input() survey: Survey;
 
   surveys: Survey[];
   surveySubscription: Subscription;
@@ -60,13 +58,15 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
   onSubmit() {
     const value = this.surveyForm.value;
     const newSurvey = new Survey(
-      value['id'],
+      this.surveyService.getNewId(),
       value['title'],
       value['choices'],
       value['name']
     );
     this.surveyService.addChoice(newSurvey);
-    this.router.navigate(['survey/view']);
+
+    //this.router.navigate(['survey/view', { id: newSurvey.id }]);
+    this.router.navigate(['survey/view/' + newSurvey.id]);
   }
 
   ngOnDestroy() {

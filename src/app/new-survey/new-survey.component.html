@@ -9,25 +9,6 @@
                 </mat-form-field>
             </div>
 
-            <div formArrayName="choices">
-                <h3>Choix des sujets:</h3>
-                <div class="form-group" *ngFor="let choiceControl of getChoices().controls; let i = index">
-                    <mat-form-field>
-                        <mat-label for="title">Choix 1</mat-label>
-                        <input matInput type="text" class="form-control" [formControlName]="i">
-                    </mat-form-field>
-                    <button mat-mini-fab color="warn" aria-label="Remove a choice" (click)="removeAt(i)">
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                </div>
-            </div>
-
-            <div class="button-container">
-                <button mat-mini-fab color="primary" aria-label="Add a choice" (click)="onAddChoice()">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </div>
-
             <div class="form-group">
                 <mat-form-field>
                     <mat-label for="name">Votre nom</mat-label>
@@ -35,8 +16,30 @@
                 </mat-form-field>
             </div>
 
+            <div class="col-xs-7">
+                <div formArrayName="choices">
+                    <h3>Choix des sujets:</h3>
+                    <div class="form-group" *ngFor="let choiceControl of getChoices().controls; let i = index">
+                        <mat-form-field>
+                            <mat-label for="title">Choix 1</mat-label>
+                            <input matInput type="text" class="form-control" [formControlName]="i">
+                        </mat-form-field>
+                        <button mat-mini-fab color="warn" type="button" aria-label="Remove a choice"
+                            (click)="removeAt(i)">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button mat-flat-button color="accent" type="button" (click)="onAddChoice()">
+                        Ajouter un sujet
+                    </button>
+                </div>
+            </div>
+
             <div class="button-row">
-                <button mat-flat-button color="primary" type="submit" routerLink="survey/view">Créer un sondage</button>
+                <button mat-flat-button color="primary" type="submit">Créer un sondage</button>
             </div>
         </div>
     </form>

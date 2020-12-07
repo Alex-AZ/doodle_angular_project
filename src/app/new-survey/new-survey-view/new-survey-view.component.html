@@ -1,11 +1,19 @@
 <div class="row">
     <div class="col-xs-12">
         <h2>Votez pour le sondage:</h2>
-        <div>
-            <app-new-survey 
-            [surveyTitle]="survey.title"
-            [surveyChoices]="survey.choices"
-            [surveyName]="survey.name"></app-new-survey>
+
+        <h3>{{ survey.title }}</h3>
+        <h3>{{ survey.name }}</h3>
+
+        <mat-list role="list">
+            <mat-list-item role="listitem">{{ survey.choices }}</mat-list-item>
+        </mat-list>
+
+        <div class="button-row">
+            <button mat-raised-button [color]="yes ? 'primary' : ''" (click)="onToggleYes()">Oui</button>
+        </div>
+        <div class="button-row">
+            <button mat-raised-button [color]="no ? 'warn' : ''" (click)="onToggleNo()">Non</button>
         </div>
 
         <div class="button-row">

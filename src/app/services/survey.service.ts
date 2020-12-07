@@ -40,5 +40,12 @@ export class SurveyService {
     return survey;
   }
 
+  getNewId(): number {
+    if (!this.surveys.length) {
+      return 1;
+    }
+    return this.surveys.sort((a, b) => a.id - b.id)[this.surveys.length - 1].id + 1;
+  }
+
   constructor() { }
 }
