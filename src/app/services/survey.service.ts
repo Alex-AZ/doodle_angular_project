@@ -7,28 +7,13 @@ import { Subject } from 'rxjs';
 })
 export class SurveyService {
 
+  //Surveys:
   private surveys: Survey[] = [];
   surveySubject = new Subject<Survey[]>();
 
+  //Surveys:
   emitSurveys() {
     this.surveySubject.next(this.surveys);
-  }
-
-  addChoice(newChoice: Survey) {
-    this.surveys.push(newChoice);
-    this.emitSurveys();
-  }
-
-  removeChoice(i: Survey) {
-    const choiceIndexToRemove = this.surveys.findIndex(
-      (i1) => {
-        if (i1 === i) {
-          return true;
-        }
-      }
-    );
-    this.surveys.splice(choiceIndexToRemove, 1);
-    this.emitSurveys();
   }
 
   findSurveyById(id: number): Survey | undefined {
@@ -46,6 +31,30 @@ export class SurveyService {
     }
     return this.surveys.sort((a, b) => a.id - b.id)[this.surveys.length - 1].id + 1;
   }
+
+
+  //Choices:
+  /* emitChoices() {
+    this.choiceSubject.next(this.choices);
+  } */
+
+  //Utile ?
+  /* addChoice(newChoice: Choice) {
+    this.choices.push(newChoice);
+    this.emitChoices();
+  } */
+
+  /* removeChoice(i: Survey) {
+    const choiceIndexToRemove = this.surveys.findIndex(
+      (i1) => {
+        if (i1 === i) {
+          return true;
+        }
+      }
+    );
+    this.surveys.splice(choiceIndexToRemove, 1);
+    this.emitSurveys();
+  } */
 
   constructor() { }
 }

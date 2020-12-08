@@ -16,7 +16,14 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-xs-7">
+            <div class="form-group">
+                <mat-form-field>
+                    <mat-label for="subject">Choix du sujet</mat-label>
+                    <input matInput type="text" class="form-control" formControlName="subject">
+                </mat-form-field>
+            </div>
+
+            <!-- <div class="col-xs-7">
                 <div formArrayName="choices">
                     <h3>Choix des sujets:</h3>
                     <div class="form-group" *ngFor="let choiceControl of getChoices().controls; let i = index">
@@ -36,7 +43,7 @@
                         Ajouter un sujet
                     </button>
                 </div>
-            </div>
+            </div> -->
 
             <div class="button-row">
                 <button mat-flat-button color="primary" type="submit">Créer un sondage</button>

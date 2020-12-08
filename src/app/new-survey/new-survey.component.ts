@@ -37,33 +37,25 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
   initForm() {
     this.surveyForm = this.formBuilder.group({
       title: '',
-      choices: this.formBuilder.array([]),
+      subject: '',
       name: ''
     });
   }
 
-  getChoices(): FormArray {
-    return this.surveyForm.get('choices') as FormArray;
-  }
-
-  onAddChoice() {
-    const newChoiceControl = this.formBuilder.control(null, Validators.required);
-    this.getChoices().push(newChoiceControl);
-  }
-
-  removeAt(i: number) {
+  /* removeAt(i: number) {
     this.getChoices().removeAt(i);
-  }
+  } */
 
   onSubmit() {
+    console.log('Toto');
+    
     const value = this.surveyForm.value;
     const newSurvey = new Survey(
       this.surveyService.getNewId(),
       value['title'],
-      value['choices'],
+      value['subject'],
       value['name']
     );
-    this.surveyService.addChoice(newSurvey);
 
     //this.router.navigate(['survey/view', { id: newSurvey.id }]);
     this.router.navigate(['survey/view/' + newSurvey.id]);
