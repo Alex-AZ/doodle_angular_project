@@ -47,8 +47,6 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
   } */
 
   onSubmit() {
-    console.log('Toto');
-    
     const value = this.surveyForm.value;
     const newSurvey = new Survey(
       this.surveyService.getNewId(),
@@ -57,6 +55,7 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
       value['name']
     );
 
+    this.surveyService.addSurvey(newSurvey);
     //this.router.navigate(['survey/view', { id: newSurvey.id }]);
     this.router.navigate(['survey/view/' + newSurvey.id]);
   }

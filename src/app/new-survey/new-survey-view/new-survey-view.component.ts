@@ -13,6 +13,7 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 export class NewSurveyViewComponent implements OnInit {
 
   //Survey
+  @Input() surveyChoice: string;
   @Input() index: number;
   survey: Survey;
 
@@ -20,29 +21,32 @@ export class NewSurveyViewComponent implements OnInit {
   /* choices: Choice[];
   choiceSubscription: Subscription;
   choicesForm: FormGroup; */
-  /* choicesForm = this.formBuilder.group({
-    choices: this.formBuilder.array([
-      this.formBuilder.control('')
-    ])
-  })
-  //Switch button:
-  yes: boolean;
-  no: boolean; */
 
-  /* getChoices(): FormArray {
+  choicesForm: FormGroup;
+
+  getChoices(): FormArray {
     return this.choicesForm.get('choices') as FormArray;
   }
- */
+
   constructor(
     private surveyService: SurveyService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute
-    ) { }
+  ) { }
 
   ngOnInit() {
     //Survey:
     const id = this.route.snapshot.params['id'];
     this.survey = this.surveyService.findSurveyById(+id);
+
+    this.choicesForm = this.formBuilder.group({
+      choices: this.formBuilder.array([
+        this.formBuilder.group({
+          name: this.formBuilder.control(''),
+          choice: this.formBuilder.control('')
+        })
+      ])
+    })
 
     //Choices:
     /* this.choiceSubscription = this.surveyService.choiceSubject.subscribe(
@@ -53,45 +57,46 @@ export class NewSurveyViewComponent implements OnInit {
     this.surveyService.emitChoices(); */
   }
 
-  //Choices:
-  /* initFormChoices() {
-    this.choicesForm = this.formBuilder.group({
-      choices: this.formBuilder.array([
-        this.formBuilder.control('')
-      ])
-    });
-  } */
   //Toggle buttons:
-  /* onToggleYes() {
-    if (this.yes === undefined || this.yes === false) {
-      this.yes = true;
-      this.no = false;
+  onToggleYes(formGroup: FormGroup) {
+    if (formGroup.value.choice === true) {
+      formGroup.value.choice = undefined;
     } else {
-      this.yes = false
+      formGroup.value.choice = true;
     }
-  } */
+  }
 
- /*  onToggleNo() {
-    if (this.no === undefined || this.no === false) {
-      this.no = true;
-      this.yes = false;
+  onToggleNo(formGroup: FormGroup) {
+    if (formGroup.value.choice === false) {
+      formGroup.value.choice = undefined;
     } else {
-      this.no = false;
+      formGroup.value.choice = false;
     }
-  } */
+  }
 
-  /* onAddChoice() {
-    const newChoiceControl = this.formBuilder.control(null, Validators.required);
-    this.getChoices().push(this.formBuilder.control(''));
-  } */
+  onAddChoice() {
+    //const newChoiceControl = this.formBuilder.control(null, Validators.required);
 
-  /* onSubmitChoices() {
-    const formValue = this.choicesForm.value;
-    /* const newChoice = new Choice(
+    /* const choicesFormM = this.getChoices();
+    for (let i = 0; i < choicesFormM; i++) {
+      choice.push(this.formBuilder.group({ _id: '', type: '', options: '' }));
+    } */
+
+    this.getChoices().push(this.formBuilder.group({
+      name: this.formBuilder.control(''),
+      choice: this.formBuilder.control('')
+    }));
+  }
+
+  onSubmitChoices() {
+    console.log(this.choicesForm.value);
+
+    /* const formValue = this.choicesForm.value;
+    const newChoice = new Choice(
       formValue['participantName']
-    );
+    ); */
     //this.surveyService.addChoice(newChoice);
-  } */
+  }
 
   /* ngOnDestroy() {
     this.choiceSubscription.unsubscribe();

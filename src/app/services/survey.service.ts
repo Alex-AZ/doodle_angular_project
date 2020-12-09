@@ -16,6 +16,11 @@ export class SurveyService {
     this.surveySubject.next(this.surveys);
   }
 
+  addSurvey(survey: Survey) {
+    this.surveys.push(survey);
+    this.emitSurveys();
+  }
+
   findSurveyById(id: number): Survey | undefined {
     const survey = this.surveys.find(
       (surveyId) => {

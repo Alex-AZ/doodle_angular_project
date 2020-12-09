@@ -1,43 +1,86 @@
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <h2>Votez pour le sondage:</h2>
+<div class="row">
+    <div class="col-xs-12">
+        <h2>Votez pour le sondage</h2>
 
-            <h3>{{ survey.title }}</h3>
-            <h3>{{ survey.name }}</h3>
-            <h3>{{ survey.subject }}</h3>
+        <div class="row">
+            <div class="col-sm">
+                <h3>{{ survey.title }}</h3>
+            </div>
+            <div class="col-sm">
+                <h3>{{ survey.name }}</h3>
+            </div>
+            <div class="col-sm">
+                <h3>{{ survey.subject }}</h3>
+            </div>
+        </div>
 
-            <!-- <form class="row" [formGroup]="choicesForm">
-                <div formArrayName="choices">
-                    <div class="form-group" *ngFor="let choiceControl of getChoices().controls; let i = index">
-                        <mat-form-field>
-                            <mat-label for="participantName">Votre nom</mat-label>
-                            <input matInput type="text" class="form-control" [formControlName]="i">
-                        </mat-form-field>
-
-                        <div class="button-row">
-                            <button mat-raised-button [color]="yes ? 'primary' : ''" (click)="onToggleYes()">Oui</button>
+        <form [formGroup]="choicesForm" (ngSubmit)="onSubmitChoices()">
+            <div formArrayName="choices">
+                <div class="form-group" *ngFor="let formGroup of getChoices().controls">
+                    <div class="row" [formGroup]="formGroup">
+                        <div class="col-sm">
+                            <mat-form-field>
+                                <mat-label for="participantName">Votre nom</mat-label>
+                                <input matInput type="text" class="form-control" formControlName="name">
+                            </mat-form-field>
                         </div>
-                        <div class="button-row">
-                            <button mat-raised-button [color]="no ? 'warn' : ''" (click)="onToggleNo()">Non</button>
-                        </div>
-    
-                        <div class="button-row">
-                            <button mat-flat-button color="primary" type="submit">Enregistrer</button>
-                        </div>
-                    </div>
 
-                    <div class="button-row">
-                        <button mat-flat-button color="accent" type="button" (click)="onAddChoice()">
-                            Ajouter un choix
-                        </button>
+                        <div class="col-sm">
+                            <div class="button-row">
+                                <button mat-icon-button type="button" [color]="formGroup.value.choice ? 'primary' : ''"
+                                    (click)="onToggleYes(formGroup)"
+                                    class="form-control">
+                                    <mat-icon>thumb_up_alt</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="button-row">
+                                <button mat-icon-button type="button" [color]="formGroup.value.choice === false ? 'warn' : ''" 
+                                    (click)="onToggleNo(formGroup)"
+                                    class="form-control">
+                                    <mat-icon>thumb_down_alt</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="button-row">
+                                <button mat-flat-button color="primary" type="submit">Enregistrer</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </form> -->
 
-            <div class="button-row">
-                <button mat-flat-button color="primary" routerLink="survey/new">Retour</button>
+                <div class="button-row">
+                    <button mat-flat-button color="accent" type="button" (click)="onAddChoice()">
+                        Ajouter un vote
+                    </button>
+                </div>
             </div>
+        </form>
+
+        <div class="button-row">
+            <button mat-flat-button class="custom-color" routerLink="survey/new">Retour</button>
         </div>
     </div>
 </div>
+
+
+<!-- <div class="button-row">
+                        <button mat-raised-button type="button" 
+                        [color]="yes ? 'primary' : ''"
+                        (click)="onToggleYes()">Oui</button>
+                    </div>
+                    <div class="button-row">
+                        <button mat-raised-button type="button" 
+                        [color]="no ? 'warn' : ''"
+                        (click)="onToggleNo()">Non</button>
+                    </div> -->
+
+<!-- <div>
+                        <input type="button" value="beef" > Beef
+                        <input type="radio" value="lamb"> Lamb
+                        <input type="radio" value="fish"> Fish
+                    </div> -->

@@ -35,6 +35,8 @@ $app-theme: mat-light-theme((
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-a {
-    color: mat-color($mat-green, 800);
+.custom-color {
+  background-color: mat-color($mat-blue, 500);
+  color: white;
 }
+
