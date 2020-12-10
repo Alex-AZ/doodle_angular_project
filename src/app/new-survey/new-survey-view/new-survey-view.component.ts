@@ -3,7 +3,7 @@ import { Survey } from 'src/app/models/survey.model';
 import { SurveyService } from 'src/app/services/survey.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-new-survey-view',
@@ -39,16 +39,16 @@ export class NewSurveyViewComponent implements OnInit {
     const id = this.route.snapshot.params['id'];
     this.survey = this.surveyService.findSurveyById(+id);
 
+    //Choices:
     this.choicesForm = this.formBuilder.group({
       choices: this.formBuilder.array([
         this.formBuilder.group({
-          name: this.formBuilder.control(''),
-          choice: this.formBuilder.control('')
+          name: this.formBuilder.control('', [Validators.required]),
+          choice: this.formBuilder.control('', [this.choiceValidator()])
         })
       ])
     })
 
-    //Choices:
     /* this.choiceSubscription = this.surveyService.choiceSubject.subscribe(
       (choices: Choice[]) => {
         this.choices = choices;
@@ -57,35 +57,47 @@ export class NewSurveyViewComponent implements OnInit {
     this.surveyService.emitChoices(); */
   }
 
+  private choiceValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => { //Ligne par défaut de ValidatorFn
+      if (control.value === undefined || control.value === '' || control.value === null) {
+        return {
+          undefined: {
+            value: ''
+          }
+        };
+      } else {
+        return null;
+      }
+    };
+  }
+
   //Toggle buttons:
   onToggleYes(formGroup: FormGroup) {
     if (formGroup.value.choice === true) {
-      formGroup.value.choice = undefined;
+      formGroup.controls.choice.setValue(undefined);
     } else {
-      formGroup.value.choice = true;
+      formGroup.controls.choice.setValue(true);
     }
   }
 
   onToggleNo(formGroup: FormGroup) {
     if (formGroup.value.choice === false) {
-      formGroup.value.choice = undefined;
+      formGroup.controls.choice.setValue(undefined);
     } else {
-      formGroup.value.choice = false;
+      formGroup.controls.choice.setValue(false);
     }
   }
+  
 
   onAddChoice() {
-    //const newChoiceControl = this.formBuilder.control(null, Validators.required);
-
-    /* const choicesFormM = this.getChoices();
-    for (let i = 0; i < choicesFormM; i++) {
-      choice.push(this.formBuilder.group({ _id: '', type: '', options: '' }));
-    } */
-
     this.getChoices().push(this.formBuilder.group({
-      name: this.formBuilder.control(''),
-      choice: this.formBuilder.control('')
+      name: this.formBuilder.control('', [Validators.required]),
+      choice: this.formBuilder.control('', [this.choiceValidator()])
     }));
+  }
+
+  onRemoveChoice(i: number) {
+    this.getChoices().removeAt(i);
   }
 
   onSubmitChoices() {
