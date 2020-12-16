@@ -20,8 +20,8 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
   surveyForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private surveyService: SurveyService,
-              private router: Router) { }
+    private surveyService: SurveyService,
+    private router: Router) { }
 
   ngOnInit() {
     this.initForm();
@@ -48,14 +48,14 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const value = this.surveyForm.value;
-    const newSurvey = new Survey(
-      this.surveyService.getNewId(),
-      value['title'],
-      value['subject'],
-      value['name']
-    );
+    const newSurvey = new Survey();
+    newSurvey.id = this.surveyService.getNewId();
+    newSurvey.title = value['title'];
+    newSurvey.subject = value['subject'];
+    newSurvey.name = value['name'];
+    console.log(this.surveyForm);
 
-    this.surveyService.addSurvey(newSurvey);
+    this.surveyService.createNewSurvey(newSurvey);
     //this.router.navigate(['survey/view', { id: newSurvey.id }]);
     this.router.navigate(['survey/view/' + newSurvey.id]);
   }

@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Survey } from 'src/app/models/survey.model';
 import { SurveyService } from 'src/app/services/survey.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-
+import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, AbstractControl, Form } from '@angular/forms';
+import firebase from 'firebase/app'
+import { Choice } from 'src/app/models/choice.model';
 @Component({
   selector: 'app-new-survey-view',
   templateUrl: './new-survey-view.component.html',
@@ -18,11 +19,14 @@ export class NewSurveyViewComponent implements OnInit {
   survey: Survey;
 
   //Choices:
-  /* choices: Choice[];
-  choiceSubscription: Subscription;
-  choicesForm: FormGroup; */
-
   choicesForm: FormGroup;
+
+  //choicesForm: FormGroup;
+  //choicesSubject = new Subject<FormGroup[]>();
+
+  /* emitChoices() {
+    this.choicesSubject.next();
+  } */
 
   getChoices(): FormArray {
     return this.choicesForm.get('choices') as FormArray;
@@ -31,7 +35,8 @@ export class NewSurveyViewComponent implements OnInit {
   constructor(
     private surveyService: SurveyService,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -40,22 +45,38 @@ export class NewSurveyViewComponent implements OnInit {
     this.survey = this.surveyService.findSurveyById(+id);
 
     //Choices:
-    this.choicesForm = this.formBuilder.group({
-      choices: this.formBuilder.array([
-        this.formBuilder.group({
+    if (this.survey !== undefined) { //Si le survey est différent de undefined alors on est redirigé vers la page view. 
+      this.choicesForm = this.formBuilder.group({
+        choices: this.formBuilder.array([])
+      })
+
+      if (this.survey.choices.length === 0) {
+        this.getChoices().push(this.formBuilder.group({
           name: this.formBuilder.control('', [Validators.required]),
           choice: this.formBuilder.control('', [this.choiceValidator()])
-        })
-      ])
-    })
-
-    /* this.choiceSubscription = this.surveyService.choiceSubject.subscribe(
-      (choices: Choice[]) => {
-        this.choices = choices;
+        }));
       }
-    );
-    this.surveyService.emitChoices(); */
+
+      this.survey.choices.forEach(choice => {
+        this.getChoices().push(this.formBuilder.group({
+          name: this.formBuilder.control(choice.name, [Validators.required]),
+          choice: this.formBuilder.control(choice.choice, [this.choiceValidator()])
+        }));
+      });
+    } else { //Sinon on est redirigé vers le path vide donc la page new.
+      this.router.navigate(['']);
+    }
   }
+
+  /* saveChoices() {
+    firebase.database().ref('/survey').set(this.choicesForm);
+  } */
+
+  /* createNewChoices(newChoices: FormGroup) {
+    this.getChoices().push(newChoices);
+    this.saveChoices();
+    //this.emitChoices();
+  } */
 
   private choiceValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => { //Ligne par défaut de ValidatorFn
@@ -87,7 +108,6 @@ export class NewSurveyViewComponent implements OnInit {
       formGroup.controls.choice.setValue(false);
     }
   }
-  
 
   onAddChoice() {
     this.getChoices().push(this.formBuilder.group({
@@ -101,18 +121,22 @@ export class NewSurveyViewComponent implements OnInit {
   }
 
   onSubmitChoices() {
-    console.log(this.choicesForm.value);
+    const choices = this.choicesForm.controls.choices.value;
 
-    /* const formValue = this.choicesForm.value;
-    const newChoice = new Choice(
-      formValue['participantName']
-    ); */
-    //this.surveyService.addChoice(newChoice);
+    this.survey.choices = [];
+
+    choices.forEach(choice => {
+      const newChoice = new Choice();
+      newChoice.name = choice.name;
+      newChoice.choice = choice.choice;
+
+      this.survey.addChoice(newChoice);
+    });
+
+    console.log(this.survey);
+    this.surveyService.editSurvey(this.survey);
   }
-
-  /* ngOnDestroy() {
-    this.choiceSubscription.unsubscribe();
-  } */
+  
 
   /* onViewSurvey(id: number) {
     this.router.navigate(['survey/new', 'survey/view', id])
