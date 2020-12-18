@@ -1,29 +1,30 @@
-<div class="row">
-    <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
-        <h2>Créez votre sondage</h2>
-        <div class="col-xs-12">
-            <div>
-                <mat-form-field>
-                    <mat-label for="title">Titre du sondage</mat-label>
-                    <input matInput type="text" class="form-control" formControlName="title">
-                </mat-form-field>
-            </div>
+<div class="container">
+    <div class="row">
+        <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
+            <h2>Créez votre sondage</h2>
+            <div class="col-xs-12">
+                <div>
+                    <mat-form-field>
+                        <mat-label for="title">Titre du sondage</mat-label>
+                        <input matInput type="text" class="form-control" formControlName="title">
+                    </mat-form-field>
+                </div>
 
-            <div class="form-group">
-                <mat-form-field>
-                    <mat-label for="name">Votre nom</mat-label>
-                    <input matInput type="text" class="form-control" formControlName="name">
-                </mat-form-field>
-            </div>
+                <div class="form-group">
+                    <mat-form-field>
+                        <mat-label for="name">Votre nom</mat-label>
+                        <input matInput type="text" class="form-control" formControlName="name">
+                    </mat-form-field>
+                </div>
 
-            <div class="form-group">
-                <mat-form-field>
-                    <mat-label for="subject">Choix du sujet</mat-label>
-                    <input matInput type="text" class="form-control" formControlName="subject">
-                </mat-form-field>
-            </div>
+                <div class="form-group">
+                    <mat-form-field>
+                        <mat-label for="subject">Choix du sujet</mat-label>
+                        <input matInput type="text" class="form-control" formControlName="subject">
+                    </mat-form-field>
+                </div>
 
-            <!-- <div class="col-xs-7">
+                <!-- <div class="col-xs-7">
                 <div formArrayName="choices">
                     <h3>Choix des sujets:</h3>
                     <div class="form-group" *ngFor="let choiceControl of getChoices().controls; let i = index">
@@ -45,9 +46,15 @@
                 </div>
             </div> -->
 
-            <div class="button-row">
-                <button mat-flat-button color="accent" type="submit">Créer un sondage</button>
+                <div class="button-row">
+                    <button mat-flat-button color="accent" type="submit">Créer un sondage</button>
+                </div>
+
+                <div class="button-row">
+                    <button mat-flat-button color="primary" routerLink="/survey/list"
+                    type="button">Liste des sondages</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>

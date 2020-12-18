@@ -3,6 +3,8 @@ import { Survey } from '../models/survey.model';
 import { Subject } from 'rxjs';
 import firebase from 'firebase/app'
 import DataSnapshot = firebase.database.DataSnapshot;
+import { MatDialog } from '@angular/material/dialog';
+import { Choice } from '../models/choice.model';
 
 
 @Injectable({
@@ -10,76 +12,76 @@ import DataSnapshot = firebase.database.DataSnapshot;
 })
 export class SurveyService {
 
-  constructor() { }
-
-  //Surveys:
   private surveys: Survey[] = [];
   surveySubject = new Subject<Survey[]>();
 
-  //Surveys:
+  constructor(public dialog: MatDialog) { }
+
   emitSurveys() {
     this.surveySubject.next(this.surveys);
   }
 
+  getNewId(): number {
+    console.log(this.surveys.length);
+    
+    if (!this.surveys.length) {
+      return 1;
+    }
+    return this.surveys.sort((a, b) => a.id - b.id)[this.surveys.length - 1].id + 1;
+  }
+
+  findSurveyById(id: number): Survey | undefined {
+    return this.surveys.find(survey => survey.id === id);
+  }
+
   saveSurvey() {
+    console.log(this.surveys);
+    
     firebase.database().ref('/survey').set(this.surveys);
+  }
+
+  getSurveys() {
+    // On va chercher les données des sondages sur Firebase
+    firebase.database().ref('/survey').on('value', (data: DataSnapshot) => {
+      // La constante récupère les datas des valeurs, s'il n'y en a pas > tab vide
+      const surveys = data.val() ? data.val() : [];
+
+      // On initialise les sondages à un tab vide pour pouvoir le parcourir ensuite
+      this.surveys = [];
+
+      // On parcours les sondages et on crée un nouveau sondage,
+      // en initialisant les élélments avec les bonnes valeurs
+      surveys.forEach(surveyElement => {
+        const survey = new Survey();
+        survey.id = surveyElement.id;
+        survey.title = surveyElement.title;
+        survey.name = surveyElement.name;
+        survey.subject = surveyElement.subject;
+
+        // Si les sondages on un élément 'choices' alors il parcours le tab des choix,
+        // et en crée un nouveau en initialisant les élélments avec les bonnes valeurs
+        if (surveyElement.hasOwnProperty('choices')) {
+          surveyElement.choices.forEach(choiceElement => {
+            const choice = new Choice();
+            choice.name = choiceElement.name;
+            choice.choice = choiceElement.choice;
+            
+            // On pousse ce nouveau tab de choix dans le sondage
+            survey.choices.push(choice);
+          });
+        }
+        // On pousse ce nouveau sondage dans les tab de sondages
+        this.surveys.push(survey);
+      });
+      // Et on émet ce nouveau tab de sondages
+      this.emitSurveys();
+    });
   }
 
   createNewSurvey(newSurvey: Survey) {
     this.surveys.push(newSurvey);
     this.saveSurvey();
     this.emitSurveys();
-  }
-
-  getSurvey(id: number) {
-    return new Promise(
-      (resolve, reject) => {
-        firebase.database().ref('/survey/' + id).once('value').then(
-          (data: DataSnapshot) => {
-            resolve(data.val());
-          }, (error) => {
-            reject(error);
-          }
-        );
-      }
-    );
-  }
-
-  /* {
-    id: 1,
-    name: 'Alexis',
-    subject: '42',
-    title: 'test',
-    choices:
-    [
-      {
-        name: 'Toto',
-        choice: true
-      },
-      {
-        name: 'Tata',
-        choice: false
-      }
-    ]
-  } */
-
-  /* addSurvey(survey: Survey) {
-    this.surveys.push(survey);
-    this.emitSurveys();
-  } */
-
-  findSurveyById(id: number): Survey | undefined {
-    console.log(this.surveys);
-    console.log(this.surveys.find(survey => survey.id === id));
-    
-    return this.surveys.find(survey => survey.id === id);
-  }
-
-  getNewId(): number {
-    if (!this.surveys.length) {
-      return 1;
-    }
-    return this.surveys.sort((a, b) => a.id - b.id)[this.surveys.length - 1].id + 1;
   }
 
   editSurvey(survey: Survey) {
@@ -93,31 +95,36 @@ export class SurveyService {
 
     this.emitSurveys();
     this.saveSurvey();
-    console.log(this.surveys);
   }
 
+  removeSurvey(survey: Survey) {
+    /* const message = "Êtes-vous sur de vouloir supprimer ce sondage ?"
 
-  //Choices:
-  /* emitChoices() {
-    this.choiceSubject.next(this.choices);
-  } */
-
-  //Utile ?
-  /* addChoice(newChoice: Choice) {
-    this.choices.push(newChoice);
-    this.emitChoices();
-  } */
-
-  /* removeChoice(i: Survey) {
-    const choiceIndexToRemove = this.surveys.findIndex(
-      (i1) => {
-        if (i1 === i) {
+    const dialogData = new ConfirmDialogModel() */
+    
+    /* confirmDialog(): void {
+      const message = `Are you sure you want to do this?`;
+  
+      const dialogData = new ConfirmDialogModel("Confirm Action", message);
+  
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: "400px",
+        data: dialogData
+      });
+  
+      dialogRef.afterClosed().subscribe(dialogResult => {
+        this.result = dialogResult;
+      });
+    } */
+    const surveyIndexToRemove = this.surveys.findIndex(
+      (surveyEl) => {
+        if (surveyEl === survey) {
           return true;
         }
       }
     );
-    this.surveys.splice(choiceIndexToRemove, 1);
+    this.surveys.splice(surveyIndexToRemove, 1);
+    this.saveSurvey();
     this.emitSurveys();
-  } */
-
+  }
 }

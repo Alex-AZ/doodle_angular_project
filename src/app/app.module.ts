@@ -16,10 +16,15 @@ import { NewSurveyComponent } from './new-survey/new-survey.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { NewSurveyViewComponent } from './new-survey/new-survey-view/new-survey-view.component';
+import { SurveyListComponent } from './new-survey/survey-list/survey-list.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'survey/new', component: NewSurveyComponent },
+  { path: 'survey/list', component: SurveyListComponent },
   { path: 'survey/view/:id', component: NewSurveyViewComponent},
   { path: '', redirectTo: 'survey/new', pathMatch:'full' },
   { path: '**', redirectTo: 'survey/new' }
@@ -29,7 +34,9 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     NewSurveyComponent,
-    NewSurveyViewComponent
+    NewSurveyViewComponent,
+    SurveyListComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +51,8 @@ const appRoutes: Routes = [
     MatListModule,
     MatIconModule,
     MatTableModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDialogModule,
   ],
   providers: [
     SurveyService

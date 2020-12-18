@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Survey } from 'src/app/models/survey.model';
 import { SurveyService } from 'src/app/services/survey.service';
-import { Subscription, Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, AbstractControl, Form } from '@angular/forms';
-import firebase from 'firebase/app'
+import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Choice } from 'src/app/models/choice.model';
+
 @Component({
   selector: 'app-new-survey-view',
   templateUrl: './new-survey-view.component.html',
@@ -14,19 +13,10 @@ import { Choice } from 'src/app/models/choice.model';
 export class NewSurveyViewComponent implements OnInit {
 
   //Survey
-  @Input() surveyChoice: string;
-  @Input() index: number;
   survey: Survey;
 
   //Choices:
   choicesForm: FormGroup;
-
-  //choicesForm: FormGroup;
-  //choicesSubject = new Subject<FormGroup[]>();
-
-  /* emitChoices() {
-    this.choicesSubject.next();
-  } */
 
   getChoices(): FormArray {
     return this.choicesForm.get('choices') as FormArray;
@@ -45,11 +35,13 @@ export class NewSurveyViewComponent implements OnInit {
     this.survey = this.surveyService.findSurveyById(+id);
 
     //Choices:
-    if (this.survey !== undefined) { //Si le survey est différent de undefined alors on est redirigé vers la page view. 
+    //Si le sondage est différent de undefined alors on est redirigé vers la page view (page des votes) * 
+    if (this.survey !== undefined) { 
       this.choicesForm = this.formBuilder.group({
         choices: this.formBuilder.array([])
       })
 
+      //Si le tableau des choix est vide alors on rentre des donées
       if (this.survey.choices.length === 0) {
         this.getChoices().push(this.formBuilder.group({
           name: this.formBuilder.control('', [Validators.required]),
@@ -57,27 +49,22 @@ export class NewSurveyViewComponent implements OnInit {
         }));
       }
 
+      //Sinon une fois les choix enregistrés on peut retourner sur le sondage 
+      //et revenir sur les choix pour les modifier
       this.survey.choices.forEach(choice => {
         this.getChoices().push(this.formBuilder.group({
           name: this.formBuilder.control(choice.name, [Validators.required]),
           choice: this.formBuilder.control(choice.choice, [this.choiceValidator()])
         }));
       });
-    } else { //Sinon on est redirigé vers le path vide donc la page new.
+
+      //Sinon on est redirigé vers le path vide donc la page new (création du sondage) *
+    } else { 
       this.router.navigate(['']);
     }
   }
 
-  /* saveChoices() {
-    firebase.database().ref('/survey').set(this.choicesForm);
-  } */
-
-  /* createNewChoices(newChoices: FormGroup) {
-    this.getChoices().push(newChoices);
-    this.saveChoices();
-    //this.emitChoices();
-  } */
-
+  //Validator Custom
   private choiceValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => { //Ligne par défaut de ValidatorFn
       if (control.value === undefined || control.value === '' || control.value === null) {
@@ -92,7 +79,7 @@ export class NewSurveyViewComponent implements OnInit {
     };
   }
 
-  //Toggle buttons:
+  //Boutons oui ou non:
   onToggleYes(formGroup: FormGroup) {
     if (formGroup.value.choice === true) {
       formGroup.controls.choice.setValue(undefined);
@@ -109,6 +96,7 @@ export class NewSurveyViewComponent implements OnInit {
     }
   }
 
+  //Ajouter un vote:
   onAddChoice() {
     this.getChoices().push(this.formBuilder.group({
       name: this.formBuilder.control('', [Validators.required]),
@@ -133,13 +121,6 @@ export class NewSurveyViewComponent implements OnInit {
       this.survey.addChoice(newChoice);
     });
 
-    console.log(this.survey);
     this.surveyService.editSurvey(this.survey);
   }
-  
-
-  /* onViewSurvey(id: number) {
-    this.router.navigate(['survey/new', 'survey/view', id])
-  } */
-
 }
