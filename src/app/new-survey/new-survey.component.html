@@ -47,11 +47,14 @@
             </div> -->
 
                 <div class="button-row">
-                    <button mat-flat-button color="accent" type="submit">Créer un sondage</button>
+                    <button mat-flat-button color="accent" 
+                    type="submit"
+                    [disabled]="surveyForm.invalid">Créer un sondage</button>
                 </div>
 
                 <div class="button-row">
-                    <button mat-flat-button color="primary" routerLink="/survey/list"
+                    <button mat-flat-button color="primary" 
+                    routerLink="/survey/list"
                     type="button">Liste des sondages</button>
                 </div>
             </div>

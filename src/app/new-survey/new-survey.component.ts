@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SurveyService } from '../services/survey.service';
 import { Survey } from '../models/survey.model';
 import { Subscription } from 'rxjs';
@@ -36,9 +36,9 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.surveyForm = this.formBuilder.group({
-      title: '',
-      subject: '',
-      name: ''
+      title: [ '', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      subject: [ '', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      name: [ '', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]]
     });
   }
 
@@ -49,10 +49,10 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
   onSubmit() {
     const value = this.surveyForm.value;
     const newSurvey = new Survey();
-    newSurvey.id = this.surveyService.getNewId();
-    newSurvey.title = value['title'];
-    newSurvey.subject = value['subject'];
-    newSurvey.name = value['name'];
+    newSurvey.setId(this.surveyService.getNewId());
+    newSurvey.setTitle(value['title']);
+    newSurvey.setSubject(value['subject']);
+    newSurvey.setName(value['name']);
     
     this.surveyService.createNewSurvey(newSurvey);
     //this.router.navigate(['survey/view', { id: newSurvey.id }]);

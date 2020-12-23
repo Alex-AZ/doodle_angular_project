@@ -1,22 +1,29 @@
 <div class="row">
     <div class="col-xs-12">
-        <h2>Liste des sondages</h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Liste des sondages</h2>
+            </div>
+        </div>
 
-        <div class="col-xs-12">
-            <mat-list role="list" *ngFor="let survey of surveys" (click)="onViewSurvey(survey)">
-                <mat-list-item role="listitem">
-                    <button mat-raised-button>
-                        {{ survey.title }}
-                        {{ survey.name }}
-                        {{ survey.subject }}
-                    </button>
-                    <button mat-icon-button type="button"
-                        color="warn"
-                        (click)="onDeleteSurvey(survey)">
-                        <mat-icon>remove_circle</mat-icon>
-                    </button>
-                </mat-list-item>
-            </mat-list>
+        <div class="row">
+            <div class="col-xs-12">
+                <ul *ngFor="let survey of surveys">
+                    <li>
+                        <button mat-raised-button type="button" (click)="onViewSurvey(survey)">
+                            {{ survey.getTitle() }}
+                            {{ survey.getName() }}
+                            {{ survey.getSubject() }}
+                        </button>
+                        <button mat-icon-button type="button" color="warn" (click)="onDeleteSurvey()">
+                            <mat-icon>remove_circle</mat-icon>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="button-row col-xs-12">
                 <button mat-flat-button color="primary" routerLink="survey/new">Nouveau sondage</button>
             </div>

@@ -42,7 +42,7 @@ export class NewSurveyViewComponent implements OnInit {
       })
 
       //Si le tableau des choix est vide alors on rentre des donées
-      if (this.survey.choices.length === 0) {
+      if (this.survey.getChoices().length === 0) {
         this.getChoices().push(this.formBuilder.group({
           name: this.formBuilder.control('', [Validators.required]),
           choice: this.formBuilder.control('', [this.choiceValidator()])
@@ -51,10 +51,10 @@ export class NewSurveyViewComponent implements OnInit {
 
       //Sinon une fois les choix enregistrés on peut retourner sur le sondage 
       //et revenir sur les choix pour les modifier
-      this.survey.choices.forEach(choice => {
+      this.survey.getChoices().forEach(choice => {
         this.getChoices().push(this.formBuilder.group({
-          name: this.formBuilder.control(choice.name, [Validators.required]),
-          choice: this.formBuilder.control(choice.choice, [this.choiceValidator()])
+          name: this.formBuilder.control(choice.getName(), [Validators.required]),
+          choice: this.formBuilder.control(choice.getChoices(), [this.choiceValidator()])
         }));
       });
 
@@ -111,12 +111,12 @@ export class NewSurveyViewComponent implements OnInit {
   onSubmitChoices() {
     const choices = this.choicesForm.controls.choices.value;
 
-    this.survey.choices = [];
+    this.survey.setChoices([]);
 
     choices.forEach(choice => {
       const newChoice = new Choice();
-      newChoice.name = choice.name;
-      newChoice.choice = choice.choice;
+      newChoice.setName(choice.name);
+      newChoice.setChoices(choice.choice);
 
       this.survey.addChoice(newChoice);
     });

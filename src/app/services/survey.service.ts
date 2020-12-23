@@ -3,9 +3,7 @@ import { Survey } from '../models/survey.model';
 import { Subject } from 'rxjs';
 import firebase from 'firebase/app'
 import DataSnapshot = firebase.database.DataSnapshot;
-import { MatDialog } from '@angular/material/dialog';
 import { Choice } from '../models/choice.model';
-
 
 @Injectable({
   providedIn: 'root'
@@ -15,28 +13,24 @@ export class SurveyService {
   private surveys: Survey[] = [];
   surveySubject = new Subject<Survey[]>();
 
-  constructor(public dialog: MatDialog) { }
+  constructor() { }
 
   emitSurveys() {
     this.surveySubject.next(this.surveys);
   }
 
   getNewId(): number {
-    console.log(this.surveys.length);
-    
     if (!this.surveys.length) {
       return 1;
     }
-    return this.surveys.sort((a, b) => a.id - b.id)[this.surveys.length - 1].id + 1;
+    return this.surveys.sort((a, b) => a.getId() - b.getId())[this.surveys.length - 1].getId() + 1;
   }
 
   findSurveyById(id: number): Survey | undefined {
-    return this.surveys.find(survey => survey.id === id);
+    return this.surveys.find(survey => survey.getId() === id);
   }
 
   saveSurvey() {
-    console.log(this.surveys);
-    
     firebase.database().ref('/survey').set(this.surveys);
   }
 
@@ -51,23 +45,23 @@ export class SurveyService {
 
       // On parcours les sondages et on crée un nouveau sondage,
       // en initialisant les élélments avec les bonnes valeurs
-      surveys.forEach(surveyElement => {
+      surveys.forEach(surveyResponse => {
         const survey = new Survey();
-        survey.id = surveyElement.id;
-        survey.title = surveyElement.title;
-        survey.name = surveyElement.name;
-        survey.subject = surveyElement.subject;
+        survey.setId(surveyResponse.id);
+        survey.setTitle(surveyResponse.title);
+        survey.setSubject(surveyResponse.subject);
+        survey.setName(surveyResponse.name);
 
         // Si les sondages on un élément 'choices' alors il parcours le tab des choix,
         // et en crée un nouveau en initialisant les élélments avec les bonnes valeurs
-        if (surveyElement.hasOwnProperty('choices')) {
-          surveyElement.choices.forEach(choiceElement => {
+        if (surveyResponse.hasOwnProperty('choices')) {
+          surveyResponse.choices.forEach(choiceResponse => {
             const choice = new Choice();
-            choice.name = choiceElement.name;
-            choice.choice = choiceElement.choice;
-            
+            choice.setName(choiceResponse.name);
+            choice.setChoices(choiceResponse.choice);
+
             // On pousse ce nouveau tab de choix dans le sondage
-            survey.choices.push(choice);
+            survey.addChoice(choice);
           });
         }
         // On pousse ce nouveau sondage dans les tab de sondages
@@ -86,7 +80,7 @@ export class SurveyService {
 
   editSurvey(survey: Survey) {
     this.surveys = this.surveys.map(surveyElement => {
-      if (surveyElement.id === survey.id) {
+      if (surveyElement.getId() === survey.getId()) {
         return survey;
       }
 
@@ -98,24 +92,6 @@ export class SurveyService {
   }
 
   removeSurvey(survey: Survey) {
-    /* const message = "Êtes-vous sur de vouloir supprimer ce sondage ?"
-
-    const dialogData = new ConfirmDialogModel() */
-    
-    /* confirmDialog(): void {
-      const message = `Are you sure you want to do this?`;
-  
-      const dialogData = new ConfirmDialogModel("Confirm Action", message);
-  
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        maxWidth: "400px",
-        data: dialogData
-      });
-  
-      dialogRef.afterClosed().subscribe(dialogResult => {
-        this.result = dialogResult;
-      });
-    } */
     const surveyIndexToRemove = this.surveys.findIndex(
       (surveyEl) => {
         if (surveyEl === survey) {

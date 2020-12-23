@@ -34,6 +34,11 @@ $app-theme: mat-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
 
 /* .custom-color {
   background-color: mat-color($mat-blue, 500);
