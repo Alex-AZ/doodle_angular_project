@@ -4,6 +4,7 @@ import { SurveyService } from 'src/app/services/survey.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Choice } from 'src/app/models/choice.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-survey-view',
@@ -26,7 +27,8 @@ export class NewSurveyViewComponent implements OnInit {
     private surveyService: SurveyService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -122,5 +124,6 @@ export class NewSurveyViewComponent implements OnInit {
     });
 
     this.surveyService.editSurvey(this.survey);
+    this.snackbar.open('Bien reçu !', 'Ferner', { duration: 5000});
   }
 }
