@@ -5,7 +5,7 @@ export class Survey {
 
     protected id: number;
     protected title: string;
-    protected subject: string;
+    protected subject: string[];
     protected name: string;
     protected choices: Choice[] = [];
 
@@ -25,11 +25,11 @@ export class Survey {
         this.title = title;
     }
 
-    getSubject(): string {
+    getSubject(): string[] {
         return this.subject;
     }
 
-    setSubject(subject: string) {
+    setSubject(subject: string[]) {
         this.subject = subject;
     }
 

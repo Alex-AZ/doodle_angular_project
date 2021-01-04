@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "doodle-angular-project": {
+      "hosting": {
+        "doodle-angular": [
+          "doodle-angular-project"
+        ]
+      }
+    }
+  }
+}

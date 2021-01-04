@@ -124,6 +124,6 @@ export class NewSurveyViewComponent implements OnInit {
     });
 
     this.surveyService.editSurvey(this.survey);
-    this.snackbar.open('Bien reçu !', 'Ferner', { duration: 5000});
+    this.snackbar.open('Enregistrement réussi !', 'Ferner', { duration: 5000});
   }
 }

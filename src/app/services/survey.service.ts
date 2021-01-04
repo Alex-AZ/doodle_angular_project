@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Survey } from '../models/survey.model';
 import { Subject } from 'rxjs';
-import firebase from 'firebase/app'
+import firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
 import { Choice } from '../models/choice.model';
 

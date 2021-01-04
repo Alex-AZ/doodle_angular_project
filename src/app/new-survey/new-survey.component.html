@@ -17,45 +17,50 @@
                     </mat-form-field>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <mat-form-field>
                         <mat-label for="subject">Choix du sujet</mat-label>
                         <input matInput type="text" class="form-control" formControlName="subject">
                     </mat-form-field>
-                </div>
+                </div> -->
 
-                <!-- <div class="col-xs-7">
-                <div formArrayName="choices">
-                    <h3>Choix des sujets:</h3>
-                    <div class="form-group" *ngFor="let choiceControl of getChoices().controls; let i = index">
-                        <mat-form-field>
-                            <mat-label for="title">Choix 1</mat-label>
-                            <input matInput type="text" class="form-control" [formControlName]="i">
-                        </mat-form-field>
-                        <button mat-mini-fab color="warn" type="button" aria-label="Remove a choice"
-                            (click)="removeAt(i)">
-                            <mat-icon>remove</mat-icon>
-                        </button>
+                <div class="col-xs-12">
+                    <div formArrayName="subjects">
+                        <h3>Choix des sujets:</h3>
+                        <div class="form-group" *ngFor="let subjectControl of getSubjects().controls; let i = index">
+                            <mat-form-field>
+                                <mat-label for="title">Sujet</mat-label>
+                                <input matInput type="text" class="form-control" [formControlName]="i">
+                            </mat-form-field>
+                            <button mat-icon-button color="warn" type="button" aria-label="Remove a subject"
+                                (click)="removeAt(i)">
+                                <mat-icon>remove_circle</mat-icon>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="button-row">
-                    <button mat-flat-button color="accent" type="button" (click)="onAddChoice()">
-                        Ajouter un sujet
-                    </button>
-                </div>
-            </div> -->
+                <div class="row">
+                    <div class="button-row col-sm">
+                        <button mat-flat-button 
+                        color="accent" 
+                        type="button" 
+                        (click)="onAddSubject()">Ajouter un sujet</button>
+                    </div>
 
-                <div class="button-row">
-                    <button mat-flat-button color="accent" 
-                    type="submit"
-                    [disabled]="surveyForm.invalid">Créer un sondage</button>
-                </div>
+                    <div class="button-row col-sm">
+                        <button mat-flat-button 
+                        color="accent" 
+                        routerLink="/survey/list" 
+                        type="button">Liste des sondages</button>
+                    </div>
 
-                <div class="button-row">
-                    <button mat-flat-button color="primary" 
-                    routerLink="/survey/list"
-                    type="button">Liste des sondages</button>
+                    <div class="button-row col-sm">
+                        <button mat-flat-button 
+                        color="primary" 
+                        type="submit" 
+                        [disabled]="surveyForm.invalid">Créer un sondage</button>
+                    </div>
                 </div>
             </div>
         </form>

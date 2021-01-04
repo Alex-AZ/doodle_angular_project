@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+//import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { SurveyService } from './services/survey.service';
@@ -7,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+//import { AngularFireModule } from '@angular/fire';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +20,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 import { NewSurveyViewComponent } from './new-survey/new-survey-view/new-survey-view.component';
 import { SurveyListComponent } from './new-survey/survey-list/survey-list.component';
@@ -46,6 +49,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
+    //AngularFireModule.initializeApp(environment.firebase),
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -54,7 +58,8 @@ const appRoutes: Routes = [
     MatTableModule,
     MatMenuModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule
   ],
   providers: [
     SurveyService

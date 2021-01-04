@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { SurveyService } from '../services/survey.service';
 import { Survey } from '../models/survey.model';
 import { Subscription } from 'rxjs';
@@ -19,9 +19,15 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
 
   surveyForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,
+  getSubjects(): FormArray {
+    return this.surveyForm.get('subjects') as FormArray;
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
     private surveyService: SurveyService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.initForm();
@@ -37,22 +43,29 @@ export class NewSurveyComponent implements OnInit, OnDestroy {
   initForm() {
     this.surveyForm = this.formBuilder.group({
       title: [ '', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      subject: [ '', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      name: [ '', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]]
+      name: [ '', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      subjects: this.formBuilder.array([], [Validators.required])
     });
   }
 
-  /* removeAt(i: number) {
-    this.getChoices().removeAt(i);
-  } */
+  onAddSubject() {
+    const newSubjectControl = this.formBuilder.control(null, Validators.required);
+    this.getSubjects().push(newSubjectControl);
+  }
+
+  removeAt(i: number) {
+    this.getSubjects().removeAt(i);
+  }
 
   onSubmit() {
     const value = this.surveyForm.value;
+
     const newSurvey = new Survey();
     newSurvey.setId(this.surveyService.getNewId());
-    newSurvey.setTitle(value['title']);
-    newSurvey.setSubject(value['subject']);
-    newSurvey.setName(value['name']);
+    //newSurvey.setTitle(value['title']);
+    newSurvey.setTitle(value.title);
+    newSurvey.setSubject(value.subjects);
+    newSurvey.setName(value.name);
     
     this.surveyService.createNewSurvey(newSurvey);
     //this.router.navigate(['survey/view', { id: newSurvey.id }]);

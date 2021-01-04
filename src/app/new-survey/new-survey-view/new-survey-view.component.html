@@ -10,7 +10,7 @@
                 <h3>{{ survey.getName() }}</h3>
             </div>
             <div class="col-sm">
-                <h3>{{ survey.getSubject() }}</h3>
+                <!-- <h3>{{ survey.getSubject() }}</h3> -->
             </div>
         </div>
 
@@ -25,9 +25,25 @@
                             </mat-form-field>
                         </div>
 
-                        <div class="button-row col-sm">
-                            <button mat-icon-button type="button" 
-                                [color]="formGroup.value.choice ? 'primary' : ''"
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>4222</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-actions>
+                                <button mat-icon-button type="button" [color]="formGroup.value.choice ? 'primary' : ''"
+                                    (click)="onToggleYes(formGroup)" class="form-control">
+                                    <mat-icon>thumb_up_alt</mat-icon>
+                                </button>
+                                <button mat-icon-button type="button"
+                                    [color]="formGroup.value.choice === false ? 'warn' : ''"
+                                    (click)="onToggleNo(formGroup)" class="form-control">
+                                    <mat-icon>thumb_down_alt</mat-icon>
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+
+                        <!-- <div class="button-row col-sm">
+                            <button mat-icon-button type="button" [color]="formGroup.value.choice ? 'primary' : ''"
                                 (click)="onToggleYes(formGroup)" class="form-control">
                                 <mat-icon>thumb_up_alt</mat-icon>
                             </button>
@@ -35,17 +51,14 @@
 
                         <div class="button-row col-sm">
                             <button mat-icon-button type="button"
-                                [color]="formGroup.value.choice === false ? 'warn' : ''" 
-                                (click)="onToggleNo(formGroup)"
+                                [color]="formGroup.value.choice === false ? 'warn' : ''" (click)="onToggleNo(formGroup)"
                                 class="form-control">
                                 <mat-icon>thumb_down_alt</mat-icon>
                             </button>
-                        </div>
+                        </div> -->
 
                         <div class="button-row col-sm">
-                            <button mat-icon-button type="button"
-                                color="warn"
-                                class="form-control"
+                            <button mat-icon-button type="button" color="warn" class="form-control"
                                 (click)="onRemoveChoice(i)">
                                 <mat-icon>remove_circle</mat-icon>
                             </button>
@@ -56,18 +69,17 @@
 
             <div class="row">
                 <div class="button-row col-sm">
-                    <button mat-flat-button color="primary" type="button" (click)="onAddChoice()">
+                    <button mat-flat-button color="accent" type="button" (click)="onAddChoice()">
                         Ajouter un vote
                     </button>
                 </div>
-    
+
                 <div class="button-row col-sm">
                     <button mat-flat-button color="warn" type="button" routerLink="/survey/list">Retour</button>
                 </div>
-    
+
                 <div class="button-row col-sm">
-                    <button mat-flat-button color="accent" 
-                        [disabled]="choicesForm.invalid">Enregistrer</button>
+                    <button mat-flat-button color="primary" [disabled]="choicesForm.invalid">Enregistrer</button>
                 </div>
             </div>
         </form>
